@@ -1,2 +1,15 @@
 # Datasets - not owned, do not publish
 data/datasets/
+
+# Local development and temporary files
+env/ 
+.venvDatasets
+.ipynb_checkpoints
+
+# Conference folder not tracked
+IARIA_Konferenz
+
+# Only upload the paper source and generated PDF
+paper/*
+!paper/main.tex
+!paper/main.pdf
