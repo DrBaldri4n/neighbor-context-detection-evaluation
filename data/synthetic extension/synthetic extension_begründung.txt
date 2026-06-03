@@ -1,0 +1,70 @@
+Synthetischen Erweiterung:
+
+- Feature sind physikalisch gekoppelt (Kopula-Sampling)
+- Zyklische Tagesabhängkeit 1400 Uhr andere Auslastung las 0300 Uhr (Block Boostrap, Sinusförmige Baseline-Modulation)
+- Idle-Zustand vs Ladevorgang (Block Boostrap)
+- Angriffs-Overlap zwischen Knoten nicht 100% gleichzeitig aber leicht verschoben zu ähnlichem Zeitfenster (Label-Shift)
+- Verschieden Angriffstypen unterschiedliche Feature-Signaturen Label-Granularität (Label-Shift)
+- Sensor-Latenzen, Verschieden Knoten reporten nicht exakt gleichzeitig (Timestamp-Jitter)
+- Neue alte Hardware - Gleich Features, aber unterschiedlich gute/starke Hardware (Bias-Offset)
+- Korrelierte Ausfall, Ausfall vom mehreren Knoten NaN-Zustand (Direkte NaN-Injektion in Gruppen)
+
+#########Entscheidung###########
+Verfahren:
+Knotengenerierung:  Block Boostrap (möglichst viel vom Originaldatensatz der EVSE-B erhalten bleiben)
+Knotenindividualisierung: Bias-Offset (für Hardware-Unterschiede) und Timestamp-Jitter (Netzwerk-Latenz)
+Angriffsverschiebung: Label-Shift
+##########ENDE##################
+
+
+
+
+
+----------------------------------------
+methoden erklärt (ChatGPT)
+Kategorie 1 — Rauschbasierte Methoden
+Kernidee: Nimm die Originaldaten und füge kleine zufällige Abweichungen hinzu.
+
+Stell dir vor, du hast ein Lineal und misst einen Tisch. Wenn du 10 verschiedene Personen denselben Tisch messen lässt, bekommst du 10 leicht verschiedene Werte — nicht weil der Tisch anders ist, sondern weil jeder Mensch (= Sensor) minimal anders misst. Genau das simulieren Rauschverfahren.
+
+Additive Gaussian Noise (AGN) — Das häufigste Verfahren. Zu jedem Messwert wird eine kleine zufällige Zahl addiert, die aus einer Glockenkurve gezogen wird. Der Originalwert bleibt das Zentrum, die Abweichung ist zufällig aber kontrolliert klein. Einfach, transparent, gut erklärbar im Paper.
+
+Multiplicative Noise — Statt zu addieren, wird der Wert mit einem Faktor multipliziert (z.B. ×1.03 oder ×0.97). Besser für Features wie power_mW, die nie negativ sein dürfen — bei additivem Rauschen könnte ein kleiner Wert theoretisch negativ werden.
+
+Perlin Noise / Correlated Noise — Normales Rauschen ist jede Sekunde unabhängig zufällig. Echter Sensorrauschen "driftet" aber langsam — wenn die Messung heute etwas zu hoch ist, ist sie morgen wahrscheinlich auch noch leicht zu hoch. Perlin Noise simuliert genau dieses träge, zeitlich zusammenhängende Verhalten.
+
+Kategorie 2 — Verteilungsbasierte Methoden
+Kernidee: Analysiere zuerst, wie die Originaldaten statistisch aussehen — dann erzeuge neue Daten, die dieselbe Statistik haben.
+
+Stell dir vor, du hast eine Urne voller Zahlen. Du schaust dir alle Zahlen an, lernst das Muster (z.B. "die meisten liegen zwischen 100 und 200, wenige bei 50 oder 300") — und dann erzeugst du neue Zahlen, die dasselbe Muster haben, aber nicht identisch mit den alten sind.
+
+Block Bootstrap — Du nimmst zufällige Blöcke (z.B. 30-Sekunden-Abschnitte) aus den Originaldaten und klebt sie in neuer Reihenfolge zusammen. Der Vorteil: Innerhalb eines Blocks bleibt der zeitliche Zusammenhang erhalten (ein Angriff bricht nicht plötzlich mitten im Block ab). Wichtig für deine Sliding-Window-Detektoren.
+
+Kernel Density Estimation (KDE) — Statt eine bekannte Verteilung (z.B. Normalverteilung) anzunehmen, schaut sich KDE die echten Daten an und baut daraus eine "Schätzung" der wahren Verteilung. Daraus werden dann neue Werte gezogen. Vorteil: Keine Annahmen, datengeleitet.
+
+Kopula-Sampling — Das ist die ausgefeilteste Methode hier. Das Problem mit einfachen Methoden: Sie behandeln Features unabhängig. Aber bus_voltage_V und power_mW hängen physikalisch zusammen — wenn die Spannung steigt, steigt auch die Leistung. Kopulas modellieren genau diese Abhängigkeitsstruktur zwischen Features, bevor neue Daten erzeugt werden. So bleiben die physikalischen Zusammenhänge im synthetischen Knoten erhalten.
+
+Kategorie 3 — Zeitreihen-spezifische Methoden
+Kernidee: Verändere nicht die Werte selbst, sondern die zeitliche Struktur der Daten.
+
+Diese Methoden stammen aus dem Bereich der Zeitreihen-Augmentierung (z.B. in der Spracherkennung oder bei Beschleunigungssensoren).
+
+Time Warping — Stell dir vor, du spielst ein Musikstück etwas schneller oder langsamer ab. Der Inhalt ist gleich, aber die Zeit läuft anders. Time Warping macht dasselbe mit Messdaten: Ein Angriff, der im Original 10 Sekunden dauert, dauert beim synthetischen Knoten vielleicht 9 oder 11 Sekunden. Simuliert unterschiedliche Reaktionsgeschwindigkeiten verschiedener Systeme.
+
+Magnitude Warping — Verändert nicht die Zeit, sondern die Stärke des Signals über die Zeit — aber nicht zufällig von Sekunde zu Sekunde, sondern langsam und gleichmäßig (z.B. das Signal ist morgens etwas schwächer und abends etwas stärker). Simuliert Sensordrift oder Temperaturschwankungen.
+
+Window Slicing — Du nimmst überlappende Zeitfenster aus den Originaldaten und behandelst jedes Fenster als eigenen "Knoten". Das ist eher ein Trick zur Datenmenge-Erhöhung als echte Knotenmodellierung — für dein Szenario nur begrenzt sinnvoll.
+
+DTW Barycenter Averaging (DBA) — Berechnet eine Art "Durchschnitt" mehrerer Zeitreihen, der die zeitliche Struktur berücksichtigt. Eher ein Analysewerkzeug als ein Generierungsverfahren.
+
+Kategorie 4 — Modellbasierte / generative Methoden
+Kernidee: Trainiere ein KI-Modell, das lernt, wie echte Daten aussehen — und lasse es dann neue erfinden.
+
+Das ist die mächtigste, aber auch aufwändigste Kategorie.
+
+VAE (Variational Autoencoder) — Ein neuronales Netz, das die Daten in einen kompakten "Code" komprimiert und aus diesem Code wieder neue Daten erzeugen kann. Man kann den Code leicht variieren → man erhält neue, ähnliche aber nicht identische Zeitreihen. Wie ein Kopierer, der bewusst leicht veränderte Kopien macht.
+
+TimeGAN — Zwei neuronale Netze kämpfen gegeneinander: Eines erzeugt Fake-Daten, das andere versucht echte von gefakten zu unterscheiden. Durch diesen Wettbewerb werden die erzeugten Daten immer realistischer. Liefert die höchste Qualität, ist aber schwer zu erklären und braucht viele Trainingsdaten.
+
+SMOTE / ADASYN — Keine echte Zeitreihenmethode. Interpoliert zwischen zwei realen Datenpunkten im Feature-Raum und erzeugt so neue Punkte. Primär gedacht, um Klassen-Ungleichgewichte zu beheben (z.B. 1000 Benign-Samples aber nur 50 Angriffs-Samples). Für die Knotenmodellierung weniger geeignet.
+

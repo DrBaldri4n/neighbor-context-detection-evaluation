@@ -23,3 +23,11 @@ Hierbei handelt es sich um netzwerkflow-basierte Datensätze (`pcap`/`NetFlow`).
 1.  **Falsche Domäne:** Netzwerkflow-Features haben keine semantische Entsprechung in einer physikalischen Ladeinfrastruktur.
 2.  **Semantische Heterogenität:** Flows auf demselben Knoten haben unterschiedliche Ursachen. Eine Aggregation über Knoten hinweg erzeugt daher bedeutungslose Mittelwerte.
 3.  **Fehlende physikalische Vergleichbarkeit:** Mein Aggregationsansatz setzt voraus, dass alle Knoten dieselben Metriken messen. Diese Datensätze wurden für klassische *NIDS-Szenarien* (Network Intrusion Detection Systems) entwickelt – nicht für die kollaborative Anomalieerkennung in physikalisch homogenen IoT-Infrastrukturen.
+
+
+
+---
+Nächsten Steps:
+Wie die Synthetische erweiterung Wissenschafltich umsetzten?
+
+
