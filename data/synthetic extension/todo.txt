@@ -1,0 +1,6 @@
+todo
+
+create a second dataset on base from the "individualized_nodes" that include gloabel events like:
+    - Grid voltage event:        shared bus_voltage_V drop at time T
+    - Coordinated charging peak: shared current_mA / power_mW spike
+    - Isolated local attack:     attack on 1 node only, benign on others

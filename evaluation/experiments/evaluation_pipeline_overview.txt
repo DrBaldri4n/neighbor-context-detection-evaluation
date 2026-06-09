@@ -1,0 +1,142 @@
+================================================================================
+EVALUATION PIPELINE OVERVIEW
+================================================================================
+
+RESEARCH QUESTIONS
+------------------
+1. Does the weighted aggregation of neighbour Threat-Reports improve
+   attack detection compared to local detection only (baseline)?
+
+2a. Does the detection quality of the aggregation improve if there
+    is a correlation between the nodes (shared global events)? 
+2b. Does the aggregation maintain detection quality even when no
+    correlation between nodes exists (no shared global events)?
+   
+3. At what M:K ratio of compromised vs. correct nodes does the
+   aggregation tip toward false attack (Echo-Chamber robustness)?
+
+================================================================================
+AGGREGATION VARIANTS (tested in all evaluations)
+================================================================================
+
+  baseline       : No aggregation. Local ML detection only.
+                   Reference for all comparisons.
+
+  no_weights     : Aggregated Threat-Reports from all neighbours.
+                   All nodes weighted equally.
+
+  fixed_weights  : Aggregated Threat-Reports from all neighbours.
+                   Manually defined static weights per node.
+
+  custom_weights : Aggregated Threat-Reports from all neighbours.
+                   Dynamic weights via Utility-Theory or Sigmoid function
+                   based on number of positive detections per node.
+
+================================================================================
+EVALUATION 1 — Individual ML Detection (Baseline)
+================================================================================
+
+  Goal:
+    Establish per-node detection performance without any neighbour context.
+    This is the reference point for Evaluations 2 and 3.
+
+  Input:   Individualized nodes (bias-offset + timestamp-jitter applied).
+           No global patterns injected.
+
+  Train:   ML model per node on local power features only:
+           shunt_voltage, bus_voltage_V, current_mA, power_mW
+
+  Output:  Threat-Report per node
+           -> attack probability per 3-minute time window
+
+  Metric:  F1, TPR (True Positive Rate), FPR (False Positive Rate)
+
+================================================================================
+EVALUATION 2a — Collaborative Detection WITH Node Correlation
+================================================================================
+
+  Goal:
+    Test if aggregated neighbour context improves detection when a
+    physically motivated global event affects all nodes simultaneously.
+    Example: a coordinated charging peak or grid voltage drop is
+    normal behaviour shared across all stations — a single node
+    would misclassify it as an attack without context.
+
+  Input:   Individualized nodes + injected global patterns.
+
+  Global pattern examples (physically motivated):
+    - Grid voltage event:        shared bus_voltage_V drop at time T
+    - Coordinated charging peak: shared current_mA / power_mW spike
+    - Isolated local attack:     attack on 1 node only, benign on others
+
+  Rule:    Patterns injected AFTER ML training — no data leakage.
+           All patterns documented (what, when, why).
+
+  Test:    All four aggregation variants.
+
+  Metric:  F1, TPR, FPR with context vs. Evaluation 1 baseline.
+           Expected result: aggregation improves detection (fewer false positives
+           on global events, better isolation of local attacks).
+
+================================================================================
+EVALUATION 2b — Collaborative Detection WITHOUT Node Correlation
+================================================================================
+
+  Goal:
+    Test if aggregated neighbour context degrades detection when no
+    shared global events exist between nodes. The aggregation receives
+    context information, but nodes behave independently — the context
+    should neither help nor harm.
+
+  Input:   Individualized nodes. No global patterns injected.
+           Nodes have independent temporal behaviour (intra-node bootstrap).
+
+  Test:    All four aggregation variants.
+
+  Metric:  F1, TPR, FPR with context vs. Evaluation 1 baseline.
+           Expected result: aggregation does not make results worse.
+           If results degrade -> the weighting strategy is too sensitive
+           to uncorrelated noise from neighbours.
+
+================================================================================
+EVALUATION 3 — Echo-Chamber Robustness (Label-Shift)
+================================================================================
+
+  Goal:
+    Test robustness of weighted aggregation when M out of N nodes are
+    compromised (falsely report attack regardless of real sensor data).
+    Power consumption data is unchanged — only labels are flipped.
+
+  Input:   Individualized nodes with label-shift on M nodes:
+           benign -> attack on compromised nodes.
+           Power features: unchanged.
+
+  Sweep:   9 nodes total (1 real + 8 synthetic). M from 1 to 8.
+
+    Compromised (M) | Correct (K) | Scenario
+    ----------------+-------------+---------------------------
+          1         |      8      | Isolated faulty reporter
+          3         |      6      | Minority attack
+          4         |      5      | Near-boundary
+          5         |      4      | Simple majority  <- tipping point
+          6         |      3      | Strong majority
+          8         |      1      | Overwhelming majority (Echo-Chamber)
+
+  Test:    All four aggregation variants under each M:K configuration.
+
+  Metric:  Aggregated Threat-Report output vs. ground truth per M:K ratio.
+           -> At what M:K does each variant tip toward false attack?
+           -> Does custom_weights resist the Echo-Chamber longer than no_weights?
+
+================================================================================
+DATASET LIMITATION
+================================================================================
+
+  The CICEVSE2024 dataset contains only one physical node (EVSE-B).
+  All 8 synthetic nodes share the same underlying temporal distribution.
+  True spatial correlations (time-of-day patterns, independent node behaviour)
+  are not naturally present — global patterns in Evaluation 2a are synthetically
+  injected and must be clearly documented as simulation assumptions.
+  A multi-node real-world dataset is identified as future work.
+
+================================================================================
