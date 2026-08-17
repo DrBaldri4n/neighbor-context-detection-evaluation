@@ -20,6 +20,9 @@ data/EDA/Wrong direction/
 data/paper_references/
 evaluation/old_csv_analysis/
 
-
 # Ignore all CSV files
 *.csv
+
+# Ignore large model files
+*.pkl
+
