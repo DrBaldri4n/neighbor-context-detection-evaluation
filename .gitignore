@@ -13,3 +13,13 @@ IARIA_Konferenz
 paper/*
 !paper/main.tex
 !paper/main.pdf
+data/synthetic extension/output/
+
+# Random personal stuff
+data/EDA/Wrong direction/
+data/paper_references/
+evaluation/old_csv_analysis/
+
+
+# Ignore all CSV files
+*.csv

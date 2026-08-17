@@ -1,1 +1,0 @@
-{"caption": "Plot C \u2014 Per-node bias heatmap (without_global_attack)", "description": "Heatmap showing each synthetic node's mean bias offset per sensor-state combination. Blue = negative offset, red = positive."}
