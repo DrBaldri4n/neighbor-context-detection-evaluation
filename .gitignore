@@ -25,4 +25,4 @@ evaluation/old_csv_analysis/
 
 # Ignore large model files
 *.pkl
-
+*.joblib
