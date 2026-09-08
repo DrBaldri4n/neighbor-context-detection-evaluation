@@ -1,5 +1,8 @@
-# Datasets - not owned, do not publish
+# Datasets and Models - not owned, do not publish
 data/datasets/
+evaluation/models/
+evaluation/__pycache__/
+
 
 # Local development and temporary files
 env/ 
@@ -19,6 +22,7 @@ data/synthetic extension/output/
 data/EDA/Wrong direction/
 data/paper_references/
 evaluation/old_csv_analysis/
+evaluation/old/
 
 # Ignore all CSV files
 *.csv
