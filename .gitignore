@@ -16,6 +16,8 @@ IARIA_Konferenz
 paper/*
 !paper/main.tex
 !paper/main.pdf
+!paper/chapter/
+!paper/chapter/*.tex
 data/synthetic extension/output/
 
 # Random personal stuff

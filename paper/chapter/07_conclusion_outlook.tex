@@ -1,0 +1,56 @@
+\section{Fazit und Ausblick}
+\label{sec:conclusion}
+
+\subsection{Inhaltliche Stichpunkte}
+\begin{itemize}
+  \item \textbf{Kernfrage beantworten}
+  \begin{itemize}
+    \item Im Notebook~07 erzielt Model~2 mit Full Context im betrachteten
+          240\,000-Zeilen-Testlauf höhere Gesamtwerte als die Baseline:
+          Macro-F1 0{,}953685 statt 0{,}911805, ROC-AUC 0{,}994932 statt
+          0{,}986353.
+    \item Vorsichtige Schlussfolgerung: In dieser Evaluation verbessert
+          sich die beobachtete Erkennungsleistung. Eine statistisch
+          signifikante Verbesserung ist ohne Signifikanztest nicht belegt.
+  \end{itemize}
+  \item \textbf{Bedeutung der Methodik}
+  \begin{itemize}
+    \item Die hybride Pipeline kombiniert reale Messreihen mit
+          klassenspezifischen TabGAN- und DAE-Anteilen.
+    \item Im separaten Generatorvergleich erzielt der Combined-Nodes-Hybrid
+          Macro-F1 0{,}8890 und ROC-AUC 0{,}9845 auf dem Original-Testdatensatz.
+    \item Empirische Begründung der Generatorwahl und unabhängige
+          Testdaten als zentrale Voraussetzungen der Aussagekraft hervorheben.
+  \end{itemize}
+  \item \textbf{Grenzen und zukünftige Arbeit}
+  \begin{itemize}
+    \item Der aktuelle Aufbau umfasst acht simulierte Knoten; Skalierung auf
+          größere Netzwerke untersuchen.
+    \item Physische Ladesäulen und echte Kommunikationsbedingungen sind
+          noch zu evaluieren.
+    \item Latenz, Bandbreite, Ausfälle, Datenschutz und manipulierte
+          Peer-Berichte als offene Fragestellungen aufnehmen.
+    \item Fehlende Signifikanzanalyse und noch zu berechnende
+          Falsch-Positiv-Rate als Grenzen der vorliegenden Auswertung benennen.
+  \end{itemize}
+\end{itemize}
+
+\subsection{Noch zu erklären}
+\begin{itemize}
+  \item Die Forschungsfrage anhand des vollständigen, einheitlichen
+        Hauptvergleichs beantworten und dabei keine statistische
+        Signifikanz behaupten, solange sie nicht getestet wurde.
+  \item Abgrenzung der zwei Evidenzstränge: Generatorvergleich auf einem
+        separaten Original-Testdatensatz und P2P-Modellvergleich auf den
+        zusammengeführten Knotentestdaten.
+  \item Grenzen der Übertragbarkeit von synthetischen/simulierten Daten auf
+        reale EVSE und Einsatzbedingungen erläutern.
+\end{itemize}
+
+\subsection{Grafikbedarf}
+\begin{itemize}
+  \item Keine neue Ergebniskurve nötig; auf die Hauptvergleichstabelle
+        und die kompakte Metrikgrafik in Kapitel~\ref{sec:results} verweisen.
+  \item Optional eine abschließende Übersicht mit Forschungsfrage,
+        Kernergebnis, Einschränkungen und nächsten Schritten.
+\end{itemize}

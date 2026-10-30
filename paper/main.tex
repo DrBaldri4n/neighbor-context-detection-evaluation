@@ -3,30 +3,32 @@
 % The class iaria.cls loads biblatex/biber with correct IARIA settings
 % as well as a set of common packages (times, inputenc[utf8], fontenc[T1],
 % graphicx, xcolor, url, orcidlink, hyperref, extdash[shortcuts])
-\addbibresource{xampl.bib} % (xampl file provided by the BibTEX base files)
 \title{Neighbor Context Detection Evaluation}
 \author{
   \IEEEauthorblockN{%
-    Yannic Hanel and Christoph Moser \,\orcidlink{0000-0002-1175-2668}}
+    Yannic Hanel \,\orcidlink{0000-0002-1175-2668}}
   \IEEEauthorblockA{%
     Department of Computer Science\\
     Ostbayerische Technische Hochschule Regensburg\\
     Regensburg, Germany\\
-    e-mail: {\tt$\lbrace$yannic.hanel\,|\,christoph.moser$\rbrace$@st.oth-regensburg.de}
-} }
+    e-mail: \texttt{yannic.hanel@st.oth-regensburg.de}
+  }
+}
 \begin{document}
 \maketitle
 \begin{abstract}
-This paper is a minimal working example.
+Entwurf später ergänzen: Forschungsfrage, Evaluationsaufbau,
+zentrale quantitative Ergebnisse und vorsichtige Schlussfolgerung.
 \end{abstract}
 \begin{IEEEkeywords}
-minimal; MWE; IARIA.
+Ladesäulen; Cybersicherheit; Intrusion Detection; Peer-to-Peer; synthetische Daten.
 \end{IEEEkeywords}
 
-\section{Introduction}
-Here we go \cite{article-full}.
-With multi-cite \cite{article-full, inproceedings-full}.
-Three element multi-cite triggers cite compression \cite{article-full, inproceedings-full, book-full}.
-
-\printbibliography
+\input{chapter/01_introduction}
+\input{chapter/02_related_work}
+\input{chapter/03_methodology}
+\input{chapter/04_synthetic_data_models}
+\input{chapter/05_experimental_setup}
+\input{chapter/06_results_discussion}
+\input{chapter/07_conclusion_outlook}
 \end{document}

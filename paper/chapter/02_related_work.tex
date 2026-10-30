@@ -1,0 +1,60 @@
+\section{Grundlagen und verwandte Arbeiten}
+\label{sec:related-work}
+
+\subsection{Inhaltliche Stichpunkte}
+\begin{itemize}
+  \item \textbf{Architektur von Ladesäulen}
+  \begin{itemize}
+    \item Im Experiment repräsentieren Node A bis H acht Knoten.
+    \item Die verwendeten Merkmale sind vier elektrische Messwerte und der
+          Betriebszustand State (idle oder charging).
+    \item Reale EVSE-Komponenten, Backend-Anbindung und Kommunikationspfade
+          anhand geeigneter Quellen beschreiben; die Notebooks bilden keine
+          vollständige physische EVSE-Architektur ab.
+  \end{itemize}
+  \item \textbf{Bedrohungsmodell}
+  \begin{itemize}
+    \item Zielklassen: Backdoor, syn-flood und ``none'' (benignes Verhalten).
+    \item In Notebook~07 werden unter anderem Distraction Attack~1/2,
+          Distributed SYN Flood, Worm Backdoor und Cluster Shuffling SYN Flood
+          als Szenariogruppen ausgewertet.
+  \end{itemize}
+  \item \textbf{P2P-basierte Erkennung}
+  \begin{itemize}
+    \item Verwandte Ansätze zum dezentralen Informationsaustausch und zur
+          verteilten Anomalieerkennung recherchieren und gegenüber dem
+          hier ausgewerteten Verfahren abgrenzen.
+    \item Konsensverfahren von einfacher gewichteter Merkmalsaggregation
+          unterscheiden: Die Notebooks implementieren eine gewichtete
+          Aggregation von Peer-Berichten, keinen dokumentierten
+          Konsensalgorithmus.
+  \end{itemize}
+  \item \textbf{Datenerweiterung in der Cybersicherheit}
+  \begin{itemize}
+    \item TabGAN und Denoising Autoencoder (DAE) als Generatoren für
+          strukturierte Daten einordnen.
+    \item Motivation für synthetische Beispiele und Risiken hinsichtlich
+          Realitätsnähe, Klassenabdeckung und Evaluationsverzerrung belegen.
+  \end{itemize}
+\end{itemize}
+
+\subsection{Noch zu erklären}
+\begin{itemize}
+  \item Herkunft und Bedeutung der Labels Backdoor und syn-flood sowie die
+        konkrete Durchführung der jeweiligen Angriffe.
+  \item Warum elektrische Betriebsmerkmale und State diese Angriffe
+        erkennbar machen sollen, obwohl die verwendeten Features keine
+        Netzwerkpaketmerkmale sind.
+  \item Welche EVSE-Standards, P2P-Ansätze und Verfahren zur synthetischen
+        Datengenerierung für diese Arbeit relevant sind; passende Quellen
+        und eine Abgrenzung zum eigenen Beitrag ergänzen.
+\end{itemize}
+
+\subsection{Grafikbedarf}
+\begin{itemize}
+  \item \textbf{Architekturskizze:} EVSE, lokale Sensorik/Erkennung und
+        externe Kommunikationspartner; als konzeptionelle Darstellung
+        kennzeichnen, falls nicht im Experiment implementiert.
+  \item \textbf{Angriffsszenarien:} optional eine kleine Übersicht der
+        Backdoor- und SYN-Flood-Szenarien aus Notebook~07.
+\end{itemize}

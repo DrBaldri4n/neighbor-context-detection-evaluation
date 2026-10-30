@@ -1,0 +1,76 @@
+\section{Experimenteller Aufbau}
+\label{sec:experimental-setup}
+
+\subsection{Inhaltliche Stichpunkte}
+\begin{itemize}
+  \item \textbf{Netzwerk und Knoten}
+  \begin{itemize}
+    \item Acht simulierte Knoten: Node A bis Node H.
+    \item In der dokumentierten Aggregation werden je Zielknoten sieben
+          Peer-Berichte ausgewertet.
+    \item Die genaue Graphstruktur und ob reale Netzwerkkommunikation
+          simuliert wird, vor der finalen Beschreibung festlegen.
+  \end{itemize}
+  \item \textbf{Datensatz und Aufteilung}
+  \begin{itemize}
+    \item Je Knoten 100\,000 Zeilen in 100 Blöcken; je Block 70\,\% Training
+          und 30\,\% Test.
+    \item Insgesamt: 560\,000 Trainings- und 240\,000 Testzeilen über alle
+          Knoten.
+    \item Klassenverteilung im Training: none 305\,900; syn-flood 149\,100;
+          Backdoor 105\,000. Im Test: none 131\,100; syn-flood 63\,900;
+          Backdoor 45\,000.
+    \item Die Datensätze enthalten pro Klasse Original-, TabGAN- und
+          DAE-Beispiele; die im fertigen Datensatz beobachteten Anteile
+          stehen in Kapitel~\ref{sec:synthetic-data}.
+    \item Aufteilung laut Notebook~02 blockweise mit 70/30-Split;
+          genaue Reihenfolge und Zufallsbehandlung der Zeilen dokumentieren.
+  \end{itemize}
+  \item \textbf{Merkmale und Klassen}
+  \begin{itemize}
+    \item Numerische Merkmale: shunt\_voltage, bus\_voltage\_V,
+          current\_mA und power\_mW; zusätzlich State.
+    \item Zielklassen: Backdoor, none und syn-flood.
+  \end{itemize}
+  \item \textbf{Varianten und Metriken}
+  \begin{itemize}
+    \item Primärer Notebook~07-Vergleich auf 240\,000 Testfällen:
+          Baseline ohne Kontext gegenüber Model~2 mit Full Context + State.
+    \item Baseline: Accuracy 0{,}930625, Macro-F1 0{,}911805,
+          Weighted-F1 0{,}928974, Log Loss 0{,}182478 und
+          ROC-AUC (Macro OVR) 0{,}986353.
+    \item Model~2: Accuracy 0{,}962204, Macro-F1 0{,}953685,
+          Weighted-F1 0{,}961924, Log Loss 0{,}098996 und
+          ROC-AUC (Macro OVR) 0{,}994932.
+    \item Zusätzlich Precision, Recall und F1 je Klasse sowie
+          Konfusionsmatrizen und ROC-Kurven auswerten.
+  \end{itemize}
+\end{itemize}
+
+\subsection{Noch zu erklären}
+\begin{itemize}
+  \item Notebook~02 teilt innerhalb 1000-Zeilen-Blöcken auf; erläutern,
+        ob zeitlich benachbarte Zeilen in Training und Test landen können
+        und wie sich dies auf die Unabhängigkeit der Testdaten auswirkt.
+  \item Die 240\,000 Testzeilen stammen aus den finalen Knoten-Datensätzen
+        mit gemischten Datenquellen. Von dem separaten Original-Testdatensatz
+        aus Notebook~01b unterscheiden und die jeweilige Verwendung erklären.
+  \item Die 100\,000 Zeilen je Knoten und die Klassenverteilungen mit den
+        erzeugten Szenarien und Originaldaten abgleichen.
+  \item Hardware, Softwareversionen, RF-Parameter, Zufalls-Seeds und
+        konkrete Normalisierungsschritte nachvollziehbar angeben.
+  \item Precision, Recall, F1 und ROC-AUC sind in den Ergebnisnotebooks
+        ausgewiesen; eine Falsch-Positiv-Rate und ein Signifikanztest sind
+        dort nicht direkt ausgewiesen und müssen gegebenenfalls ergänzt werden.
+\end{itemize}
+
+\subsection{Grafikbedarf}
+\begin{itemize}
+  \item \textbf{Vorhanden:} \url{evaluation/plots/test_attack_sequence_nodes_a_h.png}
+        zur zeitlichen Einordnung der Testblöcke; Trainingsplot nur bei
+        zusätzlichem Erkenntniswert verwenden.
+  \item \textbf{Erstellen:} Netzwerkdiagramm mit Node A bis H und der
+        tatsächlich genutzten Peer-Verbindung.
+  \item \textbf{Erstellen:} übersichtliche Tabelle oder Grafik mit
+        Klassenverteilung und Datenquellen im Trainings- und Testsatz.
+\end{itemize}

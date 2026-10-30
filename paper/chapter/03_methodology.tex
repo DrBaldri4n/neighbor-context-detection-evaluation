@@ -1,0 +1,73 @@
+\section{Methodik: Neighbor Context Detection im P2P-Netzwerk}
+\label{sec:methodology}
+
+\subsection{Inhaltliche Stichpunkte}
+\begin{itemize}
+  \item \textbf{Lokale Baseline}
+  \begin{itemize}
+    \item Random-Forest-Klassifikator auf zusammengeführten Trainingsdaten
+          der Knoten A bis H.
+    \item Eingaben: shunt\_voltage, bus\_voltage\_V, current\_mA,
+          power\_mW und State; Zielklassen Backdoor, none und syn-flood.
+    \item Lokale Modellwahrscheinlichkeiten für die Angriffsklassen werden
+          als Grundlage für Peer-Berichte gespeichert.
+  \end{itemize}
+  \item \textbf{Kontextaggregation}
+  \begin{itemize}
+    \item Pro Zeitschritt aggregiert jeder Zielknoten Berichte der sieben
+          übrigen Knoten; der Zielknoten selbst wird nicht als Peer gezählt.
+    \item Die Peer-Berichte werden anhand einer Sigmoid-Funktion gewichtet:
+          Basisgewicht 1, Maximalgewicht 3, Steilheit 10 und Wendepunkt bei
+          einer Angriffswahrscheinlichkeit von 0{,}5.
+    \item Aggregiert werden Peer-Messwerte und Peer-Klassifikationswahrscheinlichkeiten;
+          die erzeugten Kontextmerkmale umfassen außerdem Gewichtssumme und
+          Anzahl der beitragenden Peers.
+  \end{itemize}
+  \item \textbf{Modellvarianten}
+  \begin{itemize}
+    \item Model~1: eigene vier Messwerte, State und aggregierter Kontext
+          (12 Eingabemerkmale).
+    \item Model~2: eigene Messwerte, State, eigene Klassenwahrscheinlichkeiten
+          und aggregierter Kontext (15 Eingabemerkmale).
+    \item Vergleich mit Baseline ohne Kontext sowie mit einer zusätzlichen
+          transformierten Baseline, bei der eigene und aggregierte Messwerte
+          kombiniert werden.
+  \end{itemize}
+  \item \textbf{Hypothese}
+  \begin{itemize}
+    \item Kontextinformationen können bei verteilter Aktivität die
+          Erkennung verbessern; ob dies Fehlalarme reduziert, ist separat
+          anhand einer Falsch-Positiv-Rate zu prüfen.
+  \end{itemize}
+\end{itemize}
+
+\subsection{Noch zu erklären}
+\begin{itemize}
+  \item Notebook~05 verwendet alle sieben anderen Knoten; eine räumliche oder
+        logische Nachbarschaftstopologie mit weniger Peers ist nicht ersichtlich.
+        Klären, ob das Experiment ein vollständiges Mesh oder ein abstrahiertes
+        P2P-Modell darstellen soll.
+  \item Begründen, warum die Gewichte von der Angriffswahrscheinlichkeit
+        abhängen, und die Sigmoid-Gleichung sowie deren Parameter herleiten.
+  \item Beschreiben, ob die aggregierten Merkmale in der Praxis über ein
+        Netzwerk übertragen werden oder nur synchron aus vorbereiteten
+        Datensätzen berechnet werden. Latenz, Paketformat, Ausfälle und
+        Vertrauensannahmen sind in den Notebooks nicht experimentell belegt.
+  \item Die Begriffe ``Konsens'' und ``lokale Erkennung'' präzisieren:
+        Die Baseline wird laut Notebook~04 auf gepoolten Daten trainiert;
+        sie ist daher nicht ohne Weiteres ein separat trainiertes Modell
+        pro EVSE.
+  \item Leakage-Schutz, Vorverarbeitung, Normalisierung und verwendete
+        Modellparameter transparent dokumentieren.
+\end{itemize}
+
+\subsection{Grafikbedarf}
+\begin{itemize}
+  \item \textbf{Datenflussdiagramm:} lokale Merkmale
+        $\rightarrow$ Random-Forest-Wahrscheinlichkeiten
+        $\rightarrow$ gewichtete Peer-Aggregation
+        $\rightarrow$ Kontextmodell und Klassenvorhersage.
+  \item \textbf{Netzwerkdiagramm:} Node A bis H und die tatsächlich
+        verwendeten Peer-Verbindungen; nicht vor einer Klärung der Topologie
+        als Ring oder anderes Nachbarschaftsmodell darstellen.
+\end{itemize}

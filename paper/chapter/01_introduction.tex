@@ -1,0 +1,65 @@
+\section{Einleitung}
+\label{sec:introduction}
+
+\subsection{Inhaltliche Stichpunkte}
+\begin{itemize}
+  \item \textbf{Motivation}
+  \begin{itemize}
+    \item Zunehmende Vernetzung von Ladeinfrastruktur für Elektrofahrzeuge
+          (EVSE) und daraus entstehende Cybersicherheitsrisiken.
+    \item Im Datensatz werden acht Knoten (Node A bis H) und die Klassen
+          Backdoor, syn-flood und ``none'' untersucht.
+  \end{itemize}
+  \item \textbf{Problemstellung}
+  \begin{itemize}
+    \item Lokale Beobachtungen eines einzelnen Knotens können Hinweise auf
+          koordinierte oder über mehrere Knoten verteilte Angriffe verpassen.
+    \item Forschungsbedarf und Aussagen über bestehende IDS mit Literatur
+          belegen; diese Begründung ist nicht durch die Evaluationsnotebooks
+          allein abgedeckt.
+  \end{itemize}
+  \item \textbf{Lösungsansatz}
+  \begin{itemize}
+    \item Neighbor Context Detection: lokale Messwerte und
+          Erkennungswahrscheinlichkeiten werden durch aggregierte
+          Informationen anderer Knoten ergänzt.
+    \item Im ausgewerteten Aggregationslauf gehen die Informationen aller
+          sieben übrigen Knoten ein; die genaue Topologie ist in
+          Kapitel~\ref{sec:methodology} zu klären.
+  \end{itemize}
+  \item \textbf{Forschungsfrage}
+  \begin{itemize}
+    \item Führt der Austausch von Kontextinformationen benachbarter Knoten
+          in einem P2P-Netzwerk zu einer signifikant besseren
+          Erkennungsleistung?
+    \item Die Notebook-Ergebnisse zeigen höhere Kennzahlen für das
+          Full-Context-Modell; ein statistischer Signifikanztest ist dort
+          jedoch nicht dokumentiert.
+  \end{itemize}
+  \item \textbf{Beitrag der Arbeit}
+  \begin{itemize}
+    \item Evaluation einer lokalen Baseline gegenüber Random-Forest-Modellen
+          mit aggregiertem Nachbarschaftskontext.
+    \item Hybride Datengenerierung mit realen Daten sowie klassenspezifischen
+          Anteilen von TabGAN- und DAE-Daten.
+    \item Evaluation über acht simulierte Knoten und mehrere Angriffsszenarien.
+  \end{itemize}
+\end{itemize}
+
+\subsection{Noch zu erklären}
+\begin{itemize}
+  \item Was ``signifikant'' in der Forschungsfrage bedeutet und welche
+        statistischen Tests oder Wiederholungen dazu noch durchgeführt werden.
+  \item Ob die untersuchten Eingaben tatsächlich Netzwerkverkehr oder
+        elektrische Betriebsmerkmale der Ladepunkte darstellen: Die
+        Evaluationsnotebooks verwenden shunt\_voltage, bus\_voltage\_V,
+        current\_mA, power\_mW und State.
+  \item Welche Aussagen durch eigene Messungen belegt werden und welche
+        durch Literatur begründet werden müssen.
+\end{itemize}
+
+\subsection{Grafikbedarf}
+\begin{itemize}
+  \item \textbf{Übersichtsdiagramm:} acht EVSE-Knoten, lokale Erkennung,
+        Austausch aggregierter Kontextinformationen und die drei Zielklassen.
+\end{itemize}

@@ -1,0 +1,84 @@
+\section{Auswahl und Evaluierung synthetischer Datenerweiterung}
+\label{sec:synthetic-data}
+
+\subsection{Inhaltliche Stichpunkte}
+\begin{itemize}
+  \item \textbf{Vergleichsaufbau aus Notebook~01b}
+  \begin{itemize}
+    \item Je ein Random-Forest-Modell wird mit Originaldaten, DAE-Daten,
+          TabGAN-Daten und dem hybriden Datensatz der Knoten trainiert.
+    \item Alle vier Varianten werden laut Notebook auf demselben
+          Original-Testdatensatz bewertet.
+    \item Macro-F1: Original 0{,}8748; DAE 0{,}7860; TabGAN 0{,}8730;
+          Combined Nodes Hybrid 0{,}8890.
+    \item ROC-AUC: Original 0{,}9692; DAE 0{,}9327; TabGAN 0{,}9689;
+          Combined Nodes Hybrid 0{,}9845.
+    \item Test Loss: Original 0{,}2954; DAE 0{,}5892; TabGAN 0{,}2968;
+          Combined Nodes Hybrid 0{,}2682.
+    \item Die Notebook-Grafik zeigt für den hybriden Datensatz den besten
+          Macro-F1- und ROC-AUC-Wert dieser vier Varianten.
+  \end{itemize}
+  \item \textbf{Klassenabhängige Generatoranteile}
+  \begin{itemize}
+    \item Vorgesehene Aufteilung der synthetischen Anteile:
+          Backdoor 65\,\% TabGAN / 35\,\% DAE;
+          none 55\,\% TabGAN / 45\,\% DAE;
+          syn-flood 60\,\% TabGAN / 40\,\% DAE.
+    \item Die global gezählten Anteile im fertigen Datensatz weichen wegen
+          der zusätzlichen Originaldaten ab:
+          Backdoor 55{,}78\,\% TabGAN, 30{,}13\,\% DAE,
+          14{,}09\,\% Original;
+          none 53{,}20\,\% TabGAN, 43{,}51\,\% DAE,
+          3{,}29\,\% Original;
+          syn-flood 56{,}18\,\% TabGAN, 37{,}48\,\% DAE,
+          6{,}35\,\% Original.
+    \item Die Pipeline erzeugt 100 Blöcke je Knoten und jeweils
+          100\,000 Zeilen pro Knoten (acht Knoten).
+  \end{itemize}
+  \item \textbf{Begründung der Hybridwahl}
+  \begin{itemize}
+    \item Notebook-Begründung: TabGAN erhält insgesamt höhere Anteile,
+          weil es in den dortigen Modellvergleichen gegenüber DAE höhere
+          Macro-F1-/ROC-AUC-Werte und niedrigere Fehlerwerte erzielt.
+    \item Für none wird der höhere DAE-Anteil mit der Abbildung von
+          Sensorstatistiken sowie Idle-/Charging-Variabilität begründet;
+          für Backdoor mit besser erhaltenen Korrelations- und
+          Diskriminierungsmustern von TabGAN.
+    \item Diese klassenbezogenen Erklärungen anhand zusätzlicher
+          Klassenmetriken oder Verteilungsvergleiche belegen; die globale
+          Vergleichsgrafik allein zeigt keine klassenweise Generatorgüte.
+  \end{itemize}
+\end{itemize}
+
+\subsection{Noch zu erklären}
+\begin{itemize}
+  \item Die Notebook-Spalte \texttt{Reconstruction\_Error} wird mit
+        \texttt{mean\_squared\_error} aus kodierten Klassenlabels und
+        Vorhersagen berechnet. Das ist kein Rekonstruktionsfehler des
+        Generators und sollte entsprechend umbenannt oder nicht als
+        Fidelity-Metrik interpretiert werden.
+  \item \texttt{validation\_loss} stammt beim Random Forest aus
+        Out-of-Bag-Wahrscheinlichkeiten; beschreiben, warum dieser Wert
+        nicht mit einem separaten Validierungsdatensatz verwechselt werden darf.
+  \item Die angegebenen Macro-F1-/ROC-AUC-Werte beschreiben Klassifikatoren,
+        die auf den jeweiligen Datenvarianten trainiert und auf dem
+        Original-Testdatensatz geprüft wurden. Das ist kein direkter
+        statistischer Nachweis der Verteilungsähnlichkeit der Generatoren.
+  \item Erklären, wie Originalbeispiele in die Blöcke injiziert werden und
+        wie dadurch die tatsächlichen Quellenanteile pro Klasse entstehen.
+  \item Begründen, ob die Datenquellenanteile und Modellvergleiche vor der
+        finalen Auswahl festgelegt wurden; andernfalls mögliche
+        Auswahlverzerrung diskutieren.
+\end{itemize}
+
+\subsection{Grafikbedarf}
+\begin{itemize}
+  \item \textbf{Vorhanden:} \url{evaluation/plots/model_evaluation_metrics.png}
+        für Macro-F1, Test Loss, ROC-AUC und die weiteren im Notebook
+        dargestellten Kennzahlen.
+  \item \textbf{Vorhanden:} \url{evaluation/plots/feature_importance_comparison.png}
+        als Vergleich der Merkmalswichtigkeiten; nur verwenden, wenn die
+        Interpretation für die Datengenerierung relevant ist.
+  \item \textbf{Ergänzen:} Balken- oder Tabellenansicht der drei
+        Datenquellenanteile je Klasse (TabGAN, DAE, Original).
+\end{itemize}

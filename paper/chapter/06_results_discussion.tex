@@ -1,0 +1,81 @@
+\section{Ergebnisse und Diskussion}
+\label{sec:results}
+
+\subsection{Inhaltliche Stichpunkte}
+\begin{itemize}
+  \item \textbf{Baseline gegenüber Full Context}
+  \begin{itemize}
+    \item Im Notebook~07 steigt Macro-F1 von 0{,}911805 (Baseline) auf
+          0{,}953685 (Model~2); Accuracy steigt von 0{,}930625 auf
+          0{,}962204 und ROC-AUC von 0{,}986353 auf 0{,}994932.
+    \item Log Loss sinkt von 0{,}182478 auf 0{,}098996.
+    \item Diese Werte sprechen im ausgewerteten Testlauf für bessere
+          Klassifikation mit Full Context. Eine statistische Signifikanz
+          ist damit ohne zusätzliche Tests nicht belegt.
+  \end{itemize}
+  \item \textbf{Ergebnisse nach Klasse}
+  \begin{itemize}
+    \item Backdoor: Recall 0{,}758200 $\rightarrow$ 0{,}880133;
+          F1 0{,}810302 $\rightarrow$ 0{,}899922.
+    \item none: Recall 0{,}963883 $\rightarrow$ 0{,}975301;
+          F1 0{,}944577 $\rightarrow$ 0{,}967988.
+    \item syn-flood: Recall 0{,}983818 $\rightarrow$ 0{,}993130;
+          F1 0{,}980535 $\rightarrow$ 0{,}993145.
+    \item Backdoor weist in der Baseline den niedrigsten Recall auf und
+          zugleich den größten absoluten Recall-Anstieg im Full-Context-Modell.
+  \end{itemize}
+  \item \textbf{Zusätzliche Modellvariante}
+  \begin{itemize}
+    \item Die transformierte Baseline, bei der eigene Merkmale doppelt so
+          stark wie aggregierte Merkmale gewichtet werden (Verhältnis 2:1),
+          erreicht Accuracy 0{,}706217,
+          Macro-F1 0{,}691625 und ROC-AUC 0{,}870686.
+    \item Als separate Ablation/Transformation einordnen; nicht mit der
+          Baseline ohne Kontext oder mit Model~1 gleichsetzen.
+  \end{itemize}
+  \item \textbf{Szenarien und Datenqualität}
+  \begin{itemize}
+    \item Notebook~07 erzeugt Szenariovergleiche für Distraction Attack~1/2,
+          Distributed SYN Flood, Worm Backdoor und Cluster Shuffling
+          SYN Flood.
+    \item Notebook~01b zeigt beim hybriden Trainingsdatensatz gegenüber
+          Originaltraining höhere Macro-F1- und ROC-AUC-Werte auf dem dort
+          verwendeten Original-Testdatensatz; diese Datengenerierungs-
+          Evaluation von der P2P-Evaluation getrennt diskutieren.
+  \end{itemize}
+\end{itemize}
+
+\subsection{Noch zu erklären}
+\begin{itemize}
+  \item Die Falsch-Positiv-Rate ist nicht direkt in der Notebook-Tabelle
+        enthalten. Aus Konfusionsmatrizen je Klasse berechnen und die
+        Definition für das Mehrklassenproblem angeben, bevor Robustheit
+        gegenüber Sensitivität bewertet wird.
+  \item Für die Forschungsfrage den Unterschied zwischen beobachtetem
+        Leistungsanstieg und statistischer Signifikanz herausarbeiten;
+        gegebenenfalls gepaarte Tests oder Wiederholungen ergänzen.
+  \item Model~1 in Notebook~06 wird mit 24\,000 Testfällen je Knoten
+        (192\,000 insgesamt) berichtet, während der primäre Vergleich in
+        Notebook~07 30\,000 je Knoten (240\,000 insgesamt) verwendet.
+        Diese Auswertungen nicht direkt vermischen; kanonische Testmenge
+        und Modellvariante festlegen.
+  \item Die Szenarioplot-Ergebnisse pro Modell und Angriff erklären; keine
+        Aussagen über einzelne Szenarien aus der aggregierten Gesamtmetrik
+        ableiten.
+  \item Für den Hybrid-Datensatz erklären, ob die Verbesserung aus
+        Datenvielfalt, Datenmenge oder einer anderen Klassenverteilung
+        resultiert; dafür sind kontrollierte Ablationen erforderlich.
+\end{itemize}
+
+\subsection{Grafikbedarf}
+\begin{itemize}
+  \item \textbf{Vorhanden:} \url{evaluation/plots/confusion_matrices_comparison_all_models.png}
+        für den Hauptvergleich.
+  \item \textbf{Vorhanden:} \url{evaluation/plots/roc_curves_comparison_all_models.png}
+        zur Darstellung der ROC-Kurven.
+  \item \textbf{Vorhanden:} \url{evaluation/plots/scenarios_all_confusion_matrices_grid.png}
+        und die vorhandenen Szenariovergleiche im Ordner
+        \url{evaluation/plots/}.
+  \item \textbf{Erstellen:} Balkendiagramm für klassenweise Precision, Recall
+        und F1; optional Falsch-Positiv-Rate nach deren Berechnung ergänzen.
+\end{itemize}
